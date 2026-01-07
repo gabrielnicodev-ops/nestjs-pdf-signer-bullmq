@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* Esto asegura que el body ocupe toda la pantalla sin márgenes raros de Vite */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Evita el doble scroll */
+}
+
+/* Estilo para simular papel A4 en el preview */
+#pdf-preview {
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #1e293b;
+}
+
+/* Opcional: Para ver dónde termina una página en el preview */
+.page-break {
+  border-top: 2px dashed #e2e8f0;
+  margin: 2rem 0;
+  position: relative;
+}

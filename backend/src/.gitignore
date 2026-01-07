@@ -1,0 +1,3 @@
+/src/keys/*.pem
+/src/keys/*.p12
+/uploads/*.pdf
