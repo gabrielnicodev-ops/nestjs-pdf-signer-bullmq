@@ -1,76 +1,23 @@
-# HTML to PDF Signer Fastify REST API
+# 🖋️ PDF Digital Signer (Monorepo)
 
-This project provides a complete solution for converting HTML content to PDF and digitally signing the generated PDFs. It consists of a backend REST API built with Fastify (with some components using NestJS for testing) and a frontend web application for user interaction.
+An enterprise-grade solution for digital PDF signing using an asynchronous architecture.
 
-## Features
+## 🏗️ Architecture & Decisions
+- **NestJS (Backend):** Selected for its robust dependency injection and modularity.
+- **BullMQ + Redis (Upstash):** Implementation of an asynchronous task queue. This ensures the API remains responsive even during heavy PDF processing or high-latency digital signing operations.
+- **Vite (Frontend):** Fast, modern developer experience for the client-side.
+- **Digital Signing:** Uses `pdf-lib` for document manipulation and `node-signpdf` for PKCS#7 signature injection.
 
-- Convert HTML to PDF
-- Digitally sign PDFs asynchronously
-- RESTful API for backend operations
-- Web UI for uploading content and managing jobs
-- Asynchronous job processing with BullMQ and Redis
-- Error handling and validation
+## 🛠️ Tech Stack
+- **Backend:** Node.js, NestJS, BullMQ, TypeScript.
+- **Infrastructure:** Redis (Cloud via Upstash), TLS/SSL Connectivity.
+- **Security:** RSA 4096-bit self-signed certificates for testing.
 
-## Architecture
-
-### Overview
-The system is divided into two main components: the backend API and the frontend application.
-
-- **Backend**: Handles API requests, job queuing, and PDF processing.
-- **Frontend**: Provides a user interface for interacting with the backend.
-
-### Backend Architecture
-- Built with Node.js and Fastify.
-- Uses BullMQ for job queuing with Redis.
-- Processes HTML to PDF conversion and digital signing.
-
-### Frontend Architecture
-- Web application built with [React/Vue/Angular].
-- Communicates with the backend API.
-- Handles user uploads, job status, and downloads.
-
-### Data Flow
-1. User uploads HTML via frontend.
-2. Frontend sends request to backend API.
-3. Backend enqueues job for processing.
-4. Worker processes the job: converts HTML to PDF, signs it.
-5. User can check status and download the signed PDF.
-
-## Installation
-
-### Prerequisites
-- Node.js
-- Redis
-- npm or yarn
-
-### Backend Setup
-1. Navigate to `backend/`: `cd backend`
-2. Install dependencies: `npm install`
-3. Configure environment variables (Redis, certificates).
-4. Run: `npm run dev`
-
-### Frontend Setup
-1. Navigate to `frontend/`: `cd frontend`
-2. Install dependencies: `npm install`
-3. Configure API URL.
-4. Run: `npm run dev`
-
-## Usage
-
-- Start both backend and frontend.
-- Access the frontend in a browser.
-- Upload HTML content to generate and sign PDFs.
-
-## Testing
-
-- Backend: `cd backend && npm test`
-- Frontend: `cd frontend && npm test`
-
-## Contributing
-
-Follow standard practices for code quality and submit pull requests.
-
-## License
-MIT License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 🚦 Getting Started
+1. **Clone the repo:** `git clone ...`
+2. **Backend Setup:** - `cd backend && npm install`
+   - Configure `.env` with your `REDIS_URL`.
+   - Run `npm run keys:generate` to create local certificates.
+3. **Frontend Setup:**
+   - `cd frontend && npm install`
+4. **Run:** `npm run start:dev` (in both directories).
