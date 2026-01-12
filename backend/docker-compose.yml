@@ -1,0 +1,64 @@
+services:
+  # Base de datos para BullMQ
+  redis:
+    image: redis:7-alpine
+    container_name: pdf_signature_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      # Montamos nuestro archivo de configuración personalizado
+      - ./docker/redis.conf:/usr/local/etc/redis/redis.conf
+    # Le decimos a redis que arranque usando ese archivo
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    networks:
+      - pdf_network
+
+  # La aplicación (API / Producer)
+  app:
+    build: .
+    container_name: pdf_signature_app
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    networks:
+      - pdf_network
+
+  # El Worker (el que firma los PDFs)
+  # Usamos la misma imagen pero lanzamos el comando del worker
+  worker:
+    build: .
+    container_name: pdf_signature_worker
+    command: npm run start:worker  # Asegúrate de tener este script en package.json
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    networks:
+      - pdf_network
+
+  # Dashboard visual para ver las colas
+  bull-board:
+    image: billisaitis/bull-board
+    container_name: pdf_signature_dashboard
+    ports:
+      - "3001:3000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    networks:
+      - pdf_network
+
+networks:
+  pdf_network:
+    driver: bridge
+
+volumes:
+  redis_data:
